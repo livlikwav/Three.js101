@@ -15,5 +15,11 @@ University of Seoul, 'Computer graphics' class, in 2020 second semester.
   - Even lower level 3D graphics APIs: Vulkan, Metal, WebGPU, etc.
   - Latest graphics architectures: NVIDIA RTX platform, etc.
 
+## Additional goals
+
+- Flask TDD
+  - use pytest (no unittest)
+- git hook
+
 ## Getting-started
 
