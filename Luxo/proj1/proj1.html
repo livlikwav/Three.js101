@@ -89,7 +89,7 @@ function main() {
 
     // define the luxo lamp
     // common joint settings
-    const joint = {radius: 0.5, height: 1, radialSegments: 8, color:'green'};
+    const joint = {radius: 2, height: 1, radialSegments: 8, color:'green'};
     const jointGeo = new THREE.CylinderBufferGeometry(joint.radius, joint.radius, joint.height, joint.radialSegments);
     const jointMt = new THREE.MeshPhongMaterial({color: joint.color});
     // base joint
@@ -105,12 +105,20 @@ function main() {
     {
         baseJoint.add(lowerArm);
     }
-    const lowerArmMesh = {radius: 0.5, height: 2, radialSegments: 8, color:'blue'};
+    const lowerArmMesh = {radius: 1.5, height: 2, radialSegments: 8, color:'blue'};
     {
         lowerArmMesh.mesh = new THREE.Mesh(
             new THREE.CylinderBufferGeometry(lowerArmMesh.radius, lowerArmMesh.radius, lowerArmMesh.height, lowerArmMesh.radialSegments),
             new THREE.MeshPhongMaterial({color: lowerArmMesh.color}));
         lowerArm.add(lowerArmMesh.mesh);
+    }
+    // middle joint
+    const middleJoint = new THREE.Object3D();
+    {
+        lowerArm.add(middleJoint);
+        middleJoint.angle = 0;
+        middleJoint.mesh = new THREE.Mesh(jointGeo, jointMt);
+        middleJoint.add(middleJoint.mesh);
     }
 
 
@@ -157,14 +165,18 @@ function main() {
         baseDisc.rotation.y = THREE.MathUtils.degToRad(baseDisc.angle);
         baseDiscMesh.mesh.position.y = baseDiscMesh.height/2;
 
-        // luxo joints
+        // luxo base joints
         baseJoint.position.y = baseDiscMesh.height/2;
         baseJoint.mesh.rotation.z = THREE.MathUtils.degToRad(90); // lay the joint down;
         baseJoint.rotation.x = THREE.MathUtils.degToRad(baseJoint.angle); // set rotation
-        // luxo arms
+        // luxo lower arms
         lowerArm.position.y = lowerArmMesh.height/2;
         lowerArmMesh.mesh.position.y = lowerArmMesh.height/2;
         lowerArmMesh.mesh.scale.y = lowerArmMesh.height; // set scaling
+        // luxo middle joints
+        middleJoint.position.y = lowerArmMesh.height * 3 / 2;
+        middleJoint.mesh.rotation.z = THREE.MathUtils.degToRad(90); // lay the joint down;
+        middleJoint.rotation.x = THREE.MathUtils.degToRad(middleJoint.angle); // set rotation
 
         // other things
         thing1.mesh.position.set(room.width/4, thing1.radius + thing1.tubeRadius, room.width/4);
@@ -187,6 +199,7 @@ function main() {
         let jointFolder;
         jointFolder = gui.addFolder('joint (green) angles');
         jointFolder.add(baseJoint, 'angle', -180, 180, 1).name('base').onChange(updateLuxo);
+        jointFolder.add(middleJoint, 'angle', -180, 180, 1).name('middle').onChange(updateLuxo);
         jointFolder.open();
         // arms
         let armFolder;
