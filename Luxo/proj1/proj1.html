@@ -101,17 +101,17 @@ function main() {
         baseJoint.add(baseJoint.mesh);
     }
     // lower arm
-    // const lowerArm = new THREE.Object3D();
-    // {
-    //     baseJoint.add(lowerArm);
-    // }
-    // const lowerArmMesh = {radiusTop: 1, radiusBottom: 1, height: 2, radialSegments: 8, color:'blue'};
-    // {
-    //     lowerArmMesh.mesh = new THREE.Mesh(
-    //         new THREE.CylinderBufferGeometry(lowerArmMesh.radiusTop, lowerArmMesh.radiusBottom, lowerArmMesh.height, lowerArmMesh.radialSegments),
-    //         new THREE.MeshPhongMaterial({color: lowerArmMesh.color}));
-    //     lowerArm.add(lowerArmMesh.mesh);
-    // }
+    const lowerArm = new THREE.Object3D();
+    {
+        baseJoint.add(lowerArm);
+    }
+    const lowerArmMesh = {radius: 0.5, height: 2, radialSegments: 8, color:'blue'};
+    {
+        lowerArmMesh.mesh = new THREE.Mesh(
+            new THREE.CylinderBufferGeometry(lowerArmMesh.radius, lowerArmMesh.radius, lowerArmMesh.height, lowerArmMesh.radialSegments),
+            new THREE.MeshPhongMaterial({color: lowerArmMesh.color}));
+        lowerArm.add(lowerArmMesh.mesh);
+    }
 
 
     // define other objects
@@ -162,8 +162,9 @@ function main() {
         baseJoint.mesh.rotation.z = THREE.MathUtils.degToRad(90); // lay the joint down;
         baseJoint.rotation.x = THREE.MathUtils.degToRad(baseJoint.angle); // set rotation
         // luxo arms
-        // lowerArm.position.y = lowerArmMesh.height/2;
-        // lowerArmMesh.mesh.scale.y = lowerArmMesh.height;
+        lowerArm.position.y = lowerArmMesh.height/2;
+        lowerArmMesh.mesh.position.y = lowerArmMesh.height/2;
+        lowerArmMesh.mesh.scale.y = lowerArmMesh.height; // set scaling
 
         // other things
         thing1.mesh.position.set(room.width/4, thing1.radius + thing1.tubeRadius, room.width/4);
@@ -190,7 +191,7 @@ function main() {
         // arms
         let armFolder;
         armFolder = gui.addFolder('arm (blue) lengths');
-        // armFolder.add(lowerArmMesh, 'height', 2, 7, 0.1).name('lower').onChange(updateLuxo);
+        armFolder.add(lowerArmMesh, 'height', 2, 7, 0.1).name('lower').onChange(updateLuxo);
         armFolder.open();
         // baseDisc
         gui.add(baseDisc, 'angle', 0, 360, 1).name('angle (yellow)').onChange(updateLuxo);
