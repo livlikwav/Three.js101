@@ -60,37 +60,40 @@ function main() {
         scene.add(things);
     }
 
-    const thing_1 = {radius: 3, tubeRadius: 1, radialSegments: 8, tubularSegments: 24, color:'blue'};
+    const thing1 = {radius: 3, tubeRadius: 1, radialSegments: 8, tubularSegments: 24, color:'blue'};
     {
-        const thing_1_geo = new THREE.TorusBufferGeometry(thing_1.radius, thing_1.tubeRadius, thing_1.radialSegments, thing_1.tubularSegments);
-        thing_1.mesh = new THREE.Mesh(thing_1_geo, new THREE.MeshPhongMaterial({color: thing_1.color}));
-        things.add(thing_1.mesh);
+        const thingGeo1 = new THREE.TorusBufferGeometry(thing1.radius, thing1.tubeRadius, thing1.radialSegments, thing1.tubularSegments);
+        thing1.mesh = new THREE.Mesh(thingGeo1, new THREE.MeshPhongMaterial({color: thing1.color}));
+        things.add(thing1.mesh);
     }
     
-    const thing_2 = {radius: 2, tubeRadius: 1, radialSegments: 8, tubularSegments: 64, color:'white'};
+    const thing2 = {radius: 2, tubeRadius: 1, radialSegments: 8, tubularSegments: 64, color:'white'};
     {
         // default p = 2, q = 3
-        const thing_2_geo = new THREE.TorusKnotBufferGeometry(thing_2.radius, thing_2.tubeRadius, thing_2.tubularSegments, thing_2.radialSegments);
-        thing_2.mesh = new THREE.Mesh(thing_2_geo, new THREE.MeshPhongMaterial({color: thing_2.color}));
-        things.add(thing_2.mesh);
+        const thingGeo2 = new THREE.TorusKnotBufferGeometry(thing2.radius, thing2.tubeRadius, thing2.tubularSegments, thing2.radialSegments);
+        thing2.mesh = new THREE.Mesh(thingGeo2, new THREE.MeshPhongMaterial({color: thing2.color}));
+        things.add(thing2.mesh);
     }
 
-    const thing_3 = {radius: 3, height: 8, radialSegments: 16, color:'red'};
+    const thing3 = {radius: 3, height: 8, radialSegments: 16, color:'red'};
     {
-        const thing_3_geo = new THREE.ConeBufferGeometry(thing_3.radius, thing_3.height, thing_3.radialSegments);
-        thing_3.mesh = new THREE.Mesh(thing_3_geo, new THREE.MeshPhongMaterial({color: thing_3.color}));
-        things.add(thing_3.mesh);
+        const thingGeo3 = new THREE.ConeBufferGeometry(thing3.radius, thing3.height, thing3.radialSegments);
+        thing3.mesh = new THREE.Mesh(thingGeo3, new THREE.MeshPhongMaterial({color: thing3.color}));
+        things.add(thing3.mesh);
     }
 
-    const thing_4 = {radius: 7, color:'yellow'};
+    const thing4 = {radius: 7, color:'yellow'};
     {
-        const thing_4_geo = new THREE.DodecahedronBufferGeometry(thing_4.radius);
-        thing_4.mesh = new THREE.Mesh(thing_4_geo, new THREE.MeshPhongMaterial({color: thing_4.color}));
-        things.add(thing_4.mesh);
+        const thingGeo4 = new THREE.DodecahedronBufferGeometry(thing4.radius);
+        thing4.mesh = new THREE.Mesh(thingGeo4, new THREE.MeshPhongMaterial({color: thing4.color}));
+        things.add(thing4.mesh);
     }
 
 
     // define the luxo lamp
+    // joints
+    const baseJoint = {};
+
 
     // base
     const base = new THREE.Object3D();
@@ -133,10 +136,10 @@ function main() {
         baseDiscMesh.mesh.position.y = baseDiscMesh.height/2;
 
         //other things
-        thing_1.mesh.position.set(room.width/4, thing_1.radius + thing_1.tubeRadius, room.width/4);
-        thing_2.mesh.position.set(room.width/4, thing_2.radius * 2, -room.width/4);
-        thing_3.mesh.position.set(-room.width/4, thing_3.height/2, room.width/4);
-        thing_4.mesh.position.set(-room.width/4, thing_4.radius, -room.width/4);
+        thing1.mesh.position.set(room.width/4, thing1.radius + thing1.tubeRadius, room.width/4);
+        thing2.mesh.position.set(room.width/4, thing2.radius * 2, -room.width/4);
+        thing3.mesh.position.set(-room.width/4, thing3.height/2, room.width/4);
+        thing4.mesh.position.set(-room.width/4, thing4.radius, -room.width/4);
     }
 
     updateLuxo();
