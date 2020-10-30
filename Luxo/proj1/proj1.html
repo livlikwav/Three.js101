@@ -120,6 +120,18 @@ function main() {
         middleJoint.mesh = new THREE.Mesh(jointGeo, jointMt);
         middleJoint.add(middleJoint.mesh);
     }
+    // upper arm
+    const upperArm = new THREE.Object3D();
+    {
+        middleJoint.add(upperArm);
+    }
+    const upperArmMesh = {radius: 1.5, height: 2, radialSegments: 8, color:'blue'};
+    {
+        upperArmMesh.mesh = new THREE.Mesh(
+            new THREE.CylinderBufferGeometry(upperArmMesh.radius, upperArmMesh.radius, upperArmMesh.height, upperArmMesh.radialSegments),
+            new THREE.MeshPhongMaterial({color: upperArmMesh.color}));
+        upperArm.add(upperArmMesh.mesh);
+    }
 
 
     // define other objects
@@ -177,6 +189,10 @@ function main() {
         middleJoint.position.y = lowerArmMesh.height * 3 / 2;
         middleJoint.mesh.rotation.z = THREE.MathUtils.degToRad(90); // lay the joint down;
         middleJoint.rotation.x = THREE.MathUtils.degToRad(middleJoint.angle); // set rotation
+        // luxo upper arms
+        upperArm.position.y = upperArmMesh.height/2;
+        upperArmMesh.mesh.position.y = upperArmMesh.height/2;
+        upperArmMesh.mesh.scale.y = upperArmMesh.height; // set scaling
 
         // other things
         thing1.mesh.position.set(room.width/4, thing1.radius + thing1.tubeRadius, room.width/4);
@@ -205,6 +221,7 @@ function main() {
         let armFolder;
         armFolder = gui.addFolder('arm (blue) lengths');
         armFolder.add(lowerArmMesh, 'height', 2, 7, 0.1).name('lower').onChange(updateLuxo);
+        armFolder.add(upperArmMesh, 'height', 2, 7, 0.1).name('upper').onChange(updateLuxo);
         armFolder.open();
         // baseDisc
         gui.add(baseDisc, 'angle', 0, 360, 1).name('angle (yellow)').onChange(updateLuxo);
