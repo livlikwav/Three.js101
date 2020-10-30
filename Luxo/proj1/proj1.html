@@ -73,7 +73,7 @@ function main() {
     // baseDisc
     const baseDisc = new THREE.Object3D();
     {
-        baseDisc.angle = 20;
+        baseDisc.angle = 60;
         base.add(baseDisc);
     }
     
@@ -89,14 +89,14 @@ function main() {
 
     // define the luxo lamp
     // common joint settings
-    const joint = {radius: 2, height: 1, radialSegments: 8, color:'green'};
+    const joint = {radius: 0.3, height: 1, radialSegments: 8, color:'green'};
     const jointGeo = new THREE.CylinderBufferGeometry(joint.radius, joint.radius, joint.height, joint.radialSegments);
     const jointMt = new THREE.MeshPhongMaterial({color: joint.color});
     // base joint
     const baseJoint = new THREE.Object3D();
     {
         baseDisc.add(baseJoint);
-        baseJoint.angle = 0;
+        baseJoint.angle = -25;
         baseJoint.mesh = new THREE.Mesh(jointGeo, jointMt);
         baseJoint.add(baseJoint.mesh);
     }
@@ -105,7 +105,7 @@ function main() {
     {
         baseJoint.add(lowerArm);
     }
-    const lowerArmMesh = {radius: 1.5, height: 2, radialSegments: 8, color:'blue'};
+    const lowerArmMesh = {radius: 0.3, height: 2, radialSegments: 8, color:'blue'};
     {
         lowerArmMesh.mesh = new THREE.Mesh(
             new THREE.CylinderBufferGeometry(lowerArmMesh.radius, lowerArmMesh.radius, lowerArmMesh.height, lowerArmMesh.radialSegments),
@@ -116,7 +116,7 @@ function main() {
     const middleJoint = new THREE.Object3D();
     {
         lowerArm.add(middleJoint);
-        middleJoint.angle = 0;
+        middleJoint.angle = 60;
         middleJoint.mesh = new THREE.Mesh(jointGeo, jointMt);
         middleJoint.add(middleJoint.mesh);
     }
@@ -125,7 +125,7 @@ function main() {
     {
         middleJoint.add(upperArm);
     }
-    const upperArmMesh = {radius: 1.5, height: 2, radialSegments: 8, color:'blue'};
+    const upperArmMesh = {radius: 0.3, height: 2, radialSegments: 8, color:'blue'};
     {
         upperArmMesh.mesh = new THREE.Mesh(
             new THREE.CylinderBufferGeometry(upperArmMesh.radius, upperArmMesh.radius, upperArmMesh.height, upperArmMesh.radialSegments),
@@ -136,10 +136,16 @@ function main() {
     const headJoint = new THREE.Object3D();
     {
         upperArm.add(headJoint);
-        headJoint.angle = 0;
+        headJoint.angle = 80;
         headJoint.mesh = new THREE.Mesh(jointGeo, jointMt);
         headJoint.add(headJoint.mesh);
     }
+    // lamp
+    const lamp = {radiusTop: 1.5, radiusBottom: 0.5, height: 1.5, radialSegments: 8, color:'grey'};
+    const lampGeo = new THREE.CylinderBufferGeometry(lamp.radiusTop, lamp.radiusBottom, lamp.height, lamp.radialSegments);
+    const lampMt = new THREE.MeshPhongMaterial({color: lamp.color});
+    lamp.mesh = new THREE.Mesh(lampGeo, lampMt);
+    headJoint.add(lamp.mesh);
 
 
     // define other objects
@@ -201,10 +207,12 @@ function main() {
         upperArm.position.y = upperArmMesh.height/2;
         upperArmMesh.mesh.position.y = upperArmMesh.height/2;
         upperArmMesh.mesh.scale.y = upperArmMesh.height; // set scaling
-        // luxo middle joints
+        // luxo head joints
         headJoint.position.y = upperArmMesh.height * 3 / 2;
         headJoint.mesh.rotation.z = THREE.MathUtils.degToRad(90); // lay the joint down;
         headJoint.rotation.x = THREE.MathUtils.degToRad(headJoint.angle); // set rotation
+        // luxo lamp
+        lamp.mesh.position.y = lamp.height/2;
 
         // other things
         thing1.mesh.position.set(room.width/4, thing1.radius + thing1.tubeRadius, room.width/4);
