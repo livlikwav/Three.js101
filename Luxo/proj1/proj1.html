@@ -146,6 +146,12 @@ function main() {
     const lampMt = new THREE.MeshPhongMaterial({color: lamp.color});
     lamp.mesh = new THREE.Mesh(lampGeo, lampMt);
     headJoint.add(lamp.mesh);
+    // light bulb
+    const lightBulb = {radius: 0.5, widthSegments: 12, heightSegments: 8, color:'white'};
+    const lightBulbGeo = new THREE.SphereBufferGeometry(lightBulb.radius, lightBulb.widthSegments, lightBulb.heightSegments);
+    const lightBulbMt = new THREE.MeshPhongMaterial({color: lightBulb.color});
+    lightBulb.mesh = new THREE.Mesh(lightBulbGeo, lightBulbMt);
+    lamp.mesh.add(lightBulb.mesh);
 
 
     // define other objects
@@ -213,6 +219,8 @@ function main() {
         headJoint.rotation.x = THREE.MathUtils.degToRad(headJoint.angle); // set rotation
         // luxo lamp
         lamp.mesh.position.y = lamp.height/2;
+        // luxo lightBulb
+        lightBulb.mesh.position.y = lamp.height/2;
 
         // other things
         thing1.mesh.position.set(room.width/4, thing1.radius + thing1.tubeRadius, room.width/4);
