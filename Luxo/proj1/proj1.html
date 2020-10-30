@@ -132,6 +132,14 @@ function main() {
             new THREE.MeshPhongMaterial({color: upperArmMesh.color}));
         upperArm.add(upperArmMesh.mesh);
     }
+    // head joint
+    const headJoint = new THREE.Object3D();
+    {
+        upperArm.add(headJoint);
+        headJoint.angle = 0;
+        headJoint.mesh = new THREE.Mesh(jointGeo, jointMt);
+        headJoint.add(headJoint.mesh);
+    }
 
 
     // define other objects
@@ -193,6 +201,10 @@ function main() {
         upperArm.position.y = upperArmMesh.height/2;
         upperArmMesh.mesh.position.y = upperArmMesh.height/2;
         upperArmMesh.mesh.scale.y = upperArmMesh.height; // set scaling
+        // luxo middle joints
+        headJoint.position.y = upperArmMesh.height * 3 / 2;
+        headJoint.mesh.rotation.z = THREE.MathUtils.degToRad(90); // lay the joint down;
+        headJoint.rotation.x = THREE.MathUtils.degToRad(headJoint.angle); // set rotation
 
         // other things
         thing1.mesh.position.set(room.width/4, thing1.radius + thing1.tubeRadius, room.width/4);
@@ -216,6 +228,7 @@ function main() {
         jointFolder = gui.addFolder('joint (green) angles');
         jointFolder.add(baseJoint, 'angle', -180, 180, 1).name('base').onChange(updateLuxo);
         jointFolder.add(middleJoint, 'angle', -180, 180, 1).name('middle').onChange(updateLuxo);
+        jointFolder.add(headJoint, 'angle', -180, 180, 1).name('head').onChange(updateLuxo);
         jointFolder.open();
         // arms
         let armFolder;
