@@ -231,6 +231,30 @@ function main() {
 
     updateLuxo();
 
+    // DegRadHelper
+    class DegRadHelper {
+        constructor(obj, prop) {
+          this.obj = obj;
+          this.prop = prop;
+        }
+        get value() {
+          return THREE.MathUtils.radToDeg(this.obj[this.prop]);
+        }
+        set value(v) {
+          this.obj[this.prop] = THREE.MathUtils.degToRad(v);
+        }
+    }
+    // spot light
+    const spotLight = {color: 0xffffff, intensity: 1};
+    spotLight.light = new THREE.SpotLight( 0xffffff );
+    spotLight.light.position.set(10, 10, 10);
+    // spotLight.position.set(lightBulb.mesh.position.x, lightBulb.mesh.position.y, lightBulb.mesh.position.z);
+    spotLight.light.angle = THREE.MathUtils.degToRad(10);
+    scene.add(spotLight.light);
+    const spotLightHelper = new THREE.SpotLightHelper(spotLight.light);
+    scene.add(spotLightHelper);
+
+    // Set GUI
     {
         const gui = new GUI();
         let folder;
@@ -254,6 +278,11 @@ function main() {
         armFolder.open();
         // baseDisc
         gui.add(baseDisc, 'angle', 0, 360, 1).name('angle (yellow)').onChange(updateLuxo);
+        // spotLight angle
+        let spotLightFolder;
+        spotLightFolder = gui.addFolder('light bulb');
+        spotLightFolder.add(new DegRadHelper(spotLight.light, 'angle'), 'value', 10, 90, 1).name('angle').onChange(updateLuxo);
+        spotLightFolder.open();
 
     }
 
@@ -272,7 +301,6 @@ function main() {
         const light = new THREE.AmbientLight('white', 0.3);
         scene.add(light);
     }
-
 
     const fov = 45;
     const aspect = 2;  // the canvas default
