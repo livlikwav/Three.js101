@@ -75,6 +75,20 @@ function main() {
         things.add(thing_2.mesh);
     }
 
+    const thing_3 = {radius: 3, height: 8, radialSegments: 16, color:'red'};
+    {
+        const thing_3_geo = new THREE.ConeBufferGeometry(thing_3.radius, thing_3.height, thing_3.radialSegments);
+        thing_3.mesh = new THREE.Mesh(thing_3_geo, new THREE.MeshPhongMaterial({color: thing_3.color}));
+        things.add(thing_3.mesh);
+    }
+
+    const thing_4 = {radius: 7, color:'yellow'};
+    {
+        const thing_4_geo = new THREE.DodecahedronBufferGeometry(thing_4.radius);
+        thing_4.mesh = new THREE.Mesh(thing_4_geo, new THREE.MeshPhongMaterial({color: thing_4.color}));
+        things.add(thing_4.mesh);
+    }
+
 
     // define the luxo lamp
 
@@ -119,8 +133,10 @@ function main() {
         baseDiscMesh.mesh.position.y = baseDiscMesh.height/2;
 
         //other things
-        thing_1.mesh.position.set(room.width/4, thing_1.radius + thing_1.tubeRadius, -room.width/4);
-        thing_2.mesh.position.set(-room.width/4, thing_2.radius * 2, -room.width/4);
+        thing_1.mesh.position.set(room.width/4, thing_1.radius + thing_1.tubeRadius, room.width/4);
+        thing_2.mesh.position.set(room.width/4, thing_2.radius * 2, -room.width/4);
+        thing_3.mesh.position.set(-room.width/4, thing_3.height/2, room.width/4);
+        thing_4.mesh.position.set(-room.width/4, thing_4.radius, -room.width/4);
     }
 
     updateLuxo();
