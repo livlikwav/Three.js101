@@ -54,6 +54,48 @@ function main() {
         scene.add(mesh);
     }
 
+
+    // base
+    const base = new THREE.Object3D();
+    {
+        scene.add(base);
+    }
+    
+    // baseMesh 
+    const baseMesh = {width:4, height:1, color:'red'};
+    {
+        baseMesh.mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(1, 1, 1),
+                                    new THREE.MeshPhongMaterial({color: baseMesh.color}));
+        base.add(baseMesh.mesh);
+    }
+    
+    // baseDisc
+    const baseDisc = new THREE.Object3D();
+    {
+        baseDisc.angle = 20;
+        base.add(baseDisc);
+    }
+    
+    // baseDiscMesh
+    const baseDiscMesh = {radius: 1, height: 0.2, color:'orange', segs:8};
+    {
+        baseDiscMesh.mesh = new THREE.Mesh( 
+                                new THREE.CylinderBufferGeometry(baseDiscMesh.radius, 
+                                    baseDiscMesh.radius, baseDiscMesh.height, baseDiscMesh.segs),
+                                new THREE.MeshPhongMaterial({color: baseDiscMesh.color}));
+        baseDisc.add(baseDiscMesh.mesh);
+    }
+
+    // define the luxo lamp
+    // create joints
+    const joint = {radiusTop: 4, radiusBottom: 4, height: 8, radialSegments: 12, color:'green'};
+    const jointGeo = new THREE.CylinderBufferGeometry(joint.radiusTop, joint.radiusBottom, joint.height, joint.radialSegments);
+    const jointMt = new THREE.MeshPhongMaterial({color: joint.color});
+    const baseJointMesh = new THREE.Mesh(jointGeo, jointMt);
+    // add joints to scene
+    baseDiscMesh.mesh.add(baseJointMesh);
+    
+
     // define other objects
     const things = new THREE.Object3D();
     {
@@ -88,44 +130,6 @@ function main() {
         thing4.mesh = new THREE.Mesh(thingGeo4, new THREE.MeshPhongMaterial({color: thing4.color}));
         things.add(thing4.mesh);
     }
-
-
-    // define the luxo lamp
-    // joints
-    const baseJoint = {};
-
-
-    // base
-    const base = new THREE.Object3D();
-    {
-        scene.add(base);
-    }
-    
-    // baseMesh 
-    const baseMesh = {width:4, height:1, color:'red'};
-    {
-        baseMesh.mesh = new THREE.Mesh(new THREE.BoxBufferGeometry(1, 1, 1),
-                                    new THREE.MeshPhongMaterial({color: baseMesh.color}));
-        base.add(baseMesh.mesh);
-    }
-    
-    // baseDisc
-    const baseDisc = new THREE.Object3D();
-    {
-        baseDisc.angle = 20;
-        base.add(baseDisc);
-    }
-    
-    // baseDiscMesh
-    const baseDiscMesh = {radius: 1, height: 0.2, color:'orange', segs:8};
-    {
-        baseDiscMesh.mesh = new THREE.Mesh( 
-                                new THREE.CylinderBufferGeometry(baseDiscMesh.radius, 
-                                    baseDiscMesh.radius, baseDiscMesh.height, baseDiscMesh.segs),
-                                new THREE.MeshPhongMaterial({color: baseDiscMesh.color}));
-        baseDisc.add(baseDiscMesh.mesh);
-    }
-    
  
     function updateLuxo() {
         base.position.y = baseMesh.height/2;
@@ -135,7 +139,11 @@ function main() {
         baseDisc.rotation.y = THREE.MathUtils.degToRad(baseDisc.angle);
         baseDiscMesh.mesh.position.y = baseDiscMesh.height/2;
 
-        //other things
+        // define luxo
+        // baseJointMesh.position.y = joint.height/2;
+        baseJointMesh.position.y = joint.height;
+
+        // other things
         thing1.mesh.position.set(room.width/4, thing1.radius + thing1.tubeRadius, room.width/4);
         thing2.mesh.position.set(room.width/4, thing2.radius * 2, -room.width/4);
         thing3.mesh.position.set(-room.width/4, thing3.height/2, room.width/4);
