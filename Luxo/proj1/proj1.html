@@ -87,11 +87,13 @@ function main() {
     }
 
     // define the luxo lamp
-    // create joints
-    const joint = {radiusTop: 4, radiusBottom: 4, height: 8, radialSegments: 12, color:'green'};
+    // common joint settings
+    const joint = {radiusTop: 1, radiusBottom: 1, height: 2, radialSegments: 8, color:'green'};
     const jointGeo = new THREE.CylinderBufferGeometry(joint.radiusTop, joint.radiusBottom, joint.height, joint.radialSegments);
     const jointMt = new THREE.MeshPhongMaterial({color: joint.color});
+    // base joint
     const baseJointMesh = new THREE.Mesh(jointGeo, jointMt);
+    baseJointMesh.angle = 0;
     // add joints to scene
     baseDiscMesh.mesh.add(baseJointMesh);
     
@@ -140,8 +142,9 @@ function main() {
         baseDiscMesh.mesh.position.y = baseDiscMesh.height/2;
 
         // define luxo
-        // baseJointMesh.position.y = joint.height/2;
-        baseJointMesh.position.y = joint.height;
+        baseJointMesh.position.y = joint.height/2;
+        baseJointMesh.rotation.z = THREE.MathUtils.degToRad(90); // lay the joint down
+        baseJointMesh.rotation.x = THREE.MathUtils.degToRad(baseJointMesh.angle); // set rotation
 
         // other things
         thing1.mesh.position.set(room.width/4, thing1.radius + thing1.tubeRadius, room.width/4);
@@ -160,6 +163,11 @@ function main() {
         folder.add(base.position, 'z', -room.width/2, room.width/2, 1).name('z').onChange(updateLuxo);
         folder.add(baseMesh, 'height', 0.1, 2, 0.1).name('height').onChange(updateLuxo);
         folder.open();
+        // joints
+        let jointFolder;
+        jointFolder = gui.addFolder('joint (green) angles');
+        jointFolder.add(baseJointMesh, 'angle', -180, 180, 1).name('base').onChange(updateLuxo);
+        jointFolder.open();
 
         gui.add(baseDisc, 'angle', 0, 360, 1).name('angle (yellow)').onChange(updateLuxo);
 
