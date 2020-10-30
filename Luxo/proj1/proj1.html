@@ -46,13 +46,35 @@ function main() {
     // room
     const room = {width:30, height:20};
     {
-        const cubeGeo = new THREE.BoxBufferGeometry(room.width, room.height, room.width);
+        const cubeGeo = new THREE.BoxBufferGeometry(room.width, room.height, room.width); // 30, 20, 30
         const cubeMat = new THREE.MeshPhongMaterial({color: '#8AC'});
         cubeMat.side = THREE.BackSide;
         const mesh = new THREE.Mesh(cubeGeo, cubeMat);
-        mesh.position.set(0, room.height / 2, 0);
+        mesh.position.set(0, room.height / 2, 0); // 0, 10, 0
         scene.add(mesh);
     }
+
+    // define other objects
+    const things = new THREE.Object3D();
+    {
+        scene.add(things);
+    }
+
+    const thing_1 = {radius: 3, tubeRadius: 1, radialSegments: 8, tubularSegments: 24, color:'blue'};
+    {
+        const thing_1_geo = new THREE.TorusBufferGeometry(thing_1.radius, thing_1.tubeRadius, thing_1.radialSegments, thing_1.tubularSegments);
+        thing_1.mesh = new THREE.Mesh(thing_1_geo, new THREE.MeshPhongMaterial({color: thing_1.color}));
+        things.add(thing_1.mesh);
+    }
+    
+    const thing_2 = {radius: 2, tubeRadius: 1, radialSegments: 8, tubularSegments: 64, color:'white'};
+    {
+        // default p = 2, q = 3
+        const thing_2_geo = new THREE.TorusKnotBufferGeometry(thing_2.radius, thing_2.tubeRadius, thing_2.tubularSegments, thing_2.radialSegments);
+        thing_2.mesh = new THREE.Mesh(thing_2_geo, new THREE.MeshPhongMaterial({color: thing_2.color}));
+        things.add(thing_2.mesh);
+    }
+
 
     // define the luxo lamp
 
@@ -96,6 +118,9 @@ function main() {
         baseDisc.rotation.y = THREE.MathUtils.degToRad(baseDisc.angle);
         baseDiscMesh.mesh.position.y = baseDiscMesh.height/2;
 
+        //other things
+        thing_1.mesh.position.set(room.width/4, thing_1.radius + thing_1.tubeRadius, -room.width/4);
+        thing_2.mesh.position.set(-room.width/4, thing_2.radius * 2, -room.width/4);
     }
 
     updateLuxo();
