@@ -39,6 +39,7 @@ import {GUI} from '../3rdparty/dat.gui.module.js';
 function main() {
     const canvas = document.querySelector('#webgl');
     const renderer = new THREE.WebGLRenderer({canvas});
+    renderer.shadowMap.enabled = true;
    
     const scene = new THREE.Scene();
     scene.background = new THREE.Color('black');
@@ -51,6 +52,7 @@ function main() {
         cubeMat.side = THREE.BackSide;
         const mesh = new THREE.Mesh(cubeGeo, cubeMat);
         mesh.position.set(0, room.height / 2, 0); // 0, 10, 0
+        mesh.receiveShadow = true;
         scene.add(mesh);
     }
 
@@ -162,6 +164,7 @@ function main() {
     // spot light
     const spotLight = {color: 0xffffff, intensity: 1};
     spotLight.light = new THREE.SpotLight( 0xffffff );
+    spotLight.light.castShadow = true;
     spotLight.light.angle = THREE.MathUtils.degToRad(10);
     lightBulb.add(spotLight.light);
     lightBulbMesh.mesh.add(spotLight.light.target);
@@ -179,6 +182,8 @@ function main() {
     {
         const thingGeo1 = new THREE.TorusBufferGeometry(thing1.radius, thing1.tubeRadius, thing1.radialSegments, thing1.tubularSegments);
         thing1.mesh = new THREE.Mesh(thingGeo1, new THREE.MeshPhongMaterial({color: thing1.color}));
+        thing1.mesh.receiveShadow = true;
+        thing1.mesh.castShadow = true;
         things.add(thing1.mesh);
     }
     
@@ -187,6 +192,8 @@ function main() {
         // default p = 2, q = 3
         const thingGeo2 = new THREE.TorusKnotBufferGeometry(thing2.radius, thing2.tubeRadius, thing2.tubularSegments, thing2.radialSegments);
         thing2.mesh = new THREE.Mesh(thingGeo2, new THREE.MeshPhongMaterial({color: thing2.color}));
+        thing2.mesh.receiveShadow = true;
+        thing2.mesh.castShadow = true;
         things.add(thing2.mesh);
     }
 
@@ -194,6 +201,8 @@ function main() {
     {
         const thingGeo3 = new THREE.ConeBufferGeometry(thing3.radius, thing3.height, thing3.radialSegments);
         thing3.mesh = new THREE.Mesh(thingGeo3, new THREE.MeshPhongMaterial({color: thing3.color}));
+        thing3.mesh.receiveShadow = true;
+        thing3.mesh.castShadow = true;
         things.add(thing3.mesh);
     }
 
@@ -201,6 +210,8 @@ function main() {
     {
         const thingGeo4 = new THREE.DodecahedronBufferGeometry(thing4.radius);
         thing4.mesh = new THREE.Mesh(thingGeo4, new THREE.MeshPhongMaterial({color: thing4.color}));
+        thing4.mesh.receiveShadow = true;
+        thing4.mesh.castShadow = true;
         things.add(thing4.mesh);
     }
 
