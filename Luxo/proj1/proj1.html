@@ -167,7 +167,7 @@ function main() {
     lightBulbMesh.mesh.add(spotLight.light.target);
     // spot light helper
     const spotLightHelper = new THREE.SpotLightHelper(spotLight.light);
-    scene.add(spotLightHelper);
+    spotLightHelper.enabled = false;
 
     // define other objects
     const things = new THREE.Object3D();
@@ -203,6 +203,7 @@ function main() {
         thing4.mesh = new THREE.Mesh(thingGeo4, new THREE.MeshPhongMaterial({color: thing4.color}));
         things.add(thing4.mesh);
     }
+
  
     function updateLuxo() {
         base.position.y = baseMesh.height/2;
@@ -239,7 +240,9 @@ function main() {
         // luxo spot light
         spotLight.light.position.set(0, lightBulbMesh.radius, 0);
         // luxo spot light helper
-        spotLightHelper.update();
+        if(spotLightHelper.enabled){
+            spotLightHelper.update();
+        }
 
         // other things
         thing1.mesh.position.set(room.width/4, thing1.radius + thing1.tubeRadius, room.width/4);
@@ -273,13 +276,6 @@ function main() {
         folder.add(base.position, 'z', -room.width/2, room.width/2, 1).name('z').onChange(updateLuxo);
         folder.add(baseMesh, 'height', 0.1, 2, 0.1).name('height').onChange(updateLuxo);
         folder.open();
-        // joints
-        let jointFolder;
-        jointFolder = gui.addFolder('joint (green) angles');
-        jointFolder.add(baseJoint, 'angle', -180, 180, 1).name('base').onChange(updateLuxo);
-        jointFolder.add(middleJoint, 'angle', -180, 180, 1).name('middle').onChange(updateLuxo);
-        jointFolder.add(headJoint, 'angle', -180, 180, 1).name('head').onChange(updateLuxo);
-        jointFolder.open();
         // arms
         let armFolder;
         armFolder = gui.addFolder('arm (blue) lengths');
@@ -288,10 +284,25 @@ function main() {
         armFolder.open();
         // baseDisc
         gui.add(baseDisc, 'angle', 0, 360, 1).name('angle (yellow)').onChange(updateLuxo);
+        // joints
+        let jointFolder;
+        jointFolder = gui.addFolder('joint (green) angles');
+        jointFolder.add(baseJoint, 'angle', -180, 180, 1).name('base').onChange(updateLuxo);
+        jointFolder.add(middleJoint, 'angle', -180, 180, 1).name('middle').onChange(updateLuxo);
+        jointFolder.add(headJoint, 'angle', -180, 180, 1).name('head').onChange(updateLuxo);
+        jointFolder.open();
         // spotLight angle
         let spotLightFolder;
         spotLightFolder = gui.addFolder('light bulb');
         spotLightFolder.add(new DegRadHelper(spotLight.light, 'angle'), 'value', 10, 90, 1).name('angle').onChange(updateLuxo);
+        spotLightFolder.add(spotLightHelper, 'enabled').name('show helper').onChange(function(){
+            if(spotLightHelper.enabled){
+                scene.add(spotLightHelper);
+            } else {
+                scene.remove(spotLightHelper);
+            }
+            updateLuxo();
+        });
         spotLightFolder.open();
 
     }
