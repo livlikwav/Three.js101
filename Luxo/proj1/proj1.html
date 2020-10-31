@@ -98,7 +98,7 @@ function main() {
     const baseJoint = new THREE.Object3D();
     {
         baseDisc.add(baseJoint);
-        baseJoint.angle = -25;
+        baseJoint.angle = -30;
         baseJoint.mesh = new THREE.Mesh(jointGeo, jointMt);
         baseJoint.add(baseJoint.mesh);
     }
@@ -165,7 +165,7 @@ function main() {
     const spotLight = {color: 0xffffff, intensity: 1};
     spotLight.light = new THREE.SpotLight( 0xffffff );
     spotLight.light.castShadow = true;
-    spotLight.light.angle = THREE.MathUtils.degToRad(10);
+    spotLight.light.angle = THREE.MathUtils.degToRad(30);
     lightBulb.add(spotLight.light);
     lightBulbMesh.mesh.add(spotLight.light.target);
     // spot light helper
@@ -197,7 +197,7 @@ function main() {
         things.add(thing2.mesh);
     }
 
-    const thing3 = {radius: 3, height: 8, radialSegments: 16, color:'red'};
+    const thing3 = {radius: 2, height: 5, radialSegments: 16, color:'red'};
     {
         const thingGeo3 = new THREE.ConeBufferGeometry(thing3.radius, thing3.height, thing3.radialSegments);
         thing3.mesh = new THREE.Mesh(thingGeo3, new THREE.MeshPhongMaterial({color: thing3.color}));
@@ -206,7 +206,7 @@ function main() {
         things.add(thing3.mesh);
     }
 
-    const thing4 = {radius: 7, color:'yellow'};
+    const thing4 = {radius: 3, color:'yellow'};
     {
         const thingGeo4 = new THREE.DodecahedronBufferGeometry(thing4.radius);
         thing4.mesh = new THREE.Mesh(thingGeo4, new THREE.MeshPhongMaterial({color: thing4.color}));
@@ -256,10 +256,11 @@ function main() {
         }
 
         // other things
-        thing1.mesh.position.set(room.width/4, thing1.radius + thing1.tubeRadius, room.width/4);
-        thing2.mesh.position.set(room.width/4, thing2.radius * 2, -room.width/4);
-        thing3.mesh.position.set(-room.width/4, thing3.height/2, room.width/4);
-        thing4.mesh.position.set(-room.width/4, thing4.radius, -room.width/4);
+        let spacer = 2;
+        thing1.mesh.position.set(room.width/4 + spacer, thing1.radius + thing1.tubeRadius, room.width/4);
+        thing2.mesh.position.set(room.width/4, thing2.radius * 2 + spacer, -room.width/4);
+        thing3.mesh.position.set(-room.width/4, thing3.height/2 + spacer * 2, room.width/4 + spacer);
+        thing4.mesh.position.set(-room.width/4, thing4.radius + spacer, -room.width/4);
     }
 
     updateLuxo();
@@ -324,6 +325,7 @@ function main() {
         const intensity = 0.5;
         const light = new THREE.PointLight(color, intensity);
         light.position.set(0, room.height, 0);
+        light.castShadow = true;
         scene.add(light);
         
         const helper = new THREE.PointLightHelper(light);
@@ -357,8 +359,8 @@ function main() {
     }
     
     function render(time) {
-        time *= 0.0002;  // convert time to set low speed
-
+        time *= 0.0001;  // convert time to set low speed
+        // set other things to be moved
         thing1.mesh.rotation.x = time;
         thing1.mesh.rotation.y = time;
         thing2.mesh.rotation.x = -time;
