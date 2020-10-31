@@ -356,7 +356,17 @@ function main() {
         return needResize;
     }
     
-    function render() {
+    function render(time) {
+        time *= 0.0002;  // convert time to set low speed
+
+        thing1.mesh.rotation.x = time;
+        thing1.mesh.rotation.y = time;
+        thing2.mesh.rotation.x = -time;
+        thing2.mesh.rotation.y = time;
+        thing3.mesh.rotation.x = time;
+        thing3.mesh.rotation.y = -time;
+        thing4.mesh.rotation.x = -time;
+        thing4.mesh.rotation.y = -time;
     
         if (resizeRendererToDisplaySize(renderer)) {
           const canvas = renderer.domElement;
