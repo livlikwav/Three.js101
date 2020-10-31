@@ -147,12 +147,27 @@ function main() {
     lamp.mesh = new THREE.Mesh(lampGeo, lampMt);
     headJoint.add(lamp.mesh);
     // light bulb
-    const lightBulb = {radius: 0.5, widthSegments: 12, heightSegments: 8, color:'white'};
-    const lightBulbGeo = new THREE.SphereBufferGeometry(lightBulb.radius, lightBulb.widthSegments, lightBulb.heightSegments);
-    const lightBulbMt = new THREE.MeshPhongMaterial({color: lightBulb.color});
-    lightBulb.mesh = new THREE.Mesh(lightBulbGeo, lightBulbMt);
-    lamp.mesh.add(lightBulb.mesh);
-
+    const lightBulb = new THREE.Object3D;
+    {
+        lamp.mesh.add(lightBulb);
+    }
+    const lightBulbMesh = {radius: 0.5, widthSegments: 12, heightSegments: 8, color:'white'};
+    {
+        lightBulbMesh.mesh = new THREE.Mesh(
+            new THREE.SphereBufferGeometry(lightBulbMesh.radius, lightBulbMesh.widthSegments, lightBulbMesh.heightSegments),
+            new THREE.MeshPhongMaterial({color: lightBulbMesh.color}),
+        );
+        lightBulb.add(lightBulbMesh.mesh);
+    }
+    // spot light
+    const spotLight = {color: 0xffffff, intensity: 1};
+    spotLight.light = new THREE.SpotLight( 0xffffff );
+    spotLight.light.angle = THREE.MathUtils.degToRad(10);
+    lightBulb.add(spotLight.light);
+    lightBulbMesh.mesh.add(spotLight.light.target);
+    // spot light helper
+    const spotLightHelper = new THREE.SpotLightHelper(spotLight.light);
+    scene.add(spotLightHelper);
 
     // define other objects
     const things = new THREE.Object3D();
@@ -220,7 +235,11 @@ function main() {
         // luxo lamp
         lamp.mesh.position.y = lamp.height/2;
         // luxo lightBulb
-        lightBulb.mesh.position.y = lamp.height/2;
+        lightBulbMesh.mesh.position.y = lamp.height/2;
+        // luxo spot light
+        spotLight.light.position.set(0, lightBulbMesh.radius, 0);
+        // luxo spot light helper
+        spotLightHelper.update();
 
         // other things
         thing1.mesh.position.set(room.width/4, thing1.radius + thing1.tubeRadius, room.width/4);
@@ -244,15 +263,6 @@ function main() {
           this.obj[this.prop] = THREE.MathUtils.degToRad(v);
         }
     }
-    // spot light
-    const spotLight = {color: 0xffffff, intensity: 1};
-    spotLight.light = new THREE.SpotLight( 0xffffff );
-    spotLight.light.position.set(10, 10, 10);
-    // spotLight.position.set(lightBulb.mesh.position.x, lightBulb.mesh.position.y, lightBulb.mesh.position.z);
-    spotLight.light.angle = THREE.MathUtils.degToRad(10);
-    scene.add(spotLight.light);
-    const spotLightHelper = new THREE.SpotLightHelper(spotLight.light);
-    scene.add(spotLightHelper);
 
     // Set GUI
     {
