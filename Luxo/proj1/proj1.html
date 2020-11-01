@@ -229,19 +229,19 @@ function main() {
         baseJoint.mesh.rotation.z = THREE.MathUtils.degToRad(90); // lay the joint down;
         baseJoint.rotation.x = THREE.MathUtils.degToRad(baseJoint.angle); // set rotation
         // luxo lower arms
-        lowerArm.position.y = lowerArmMesh.height/2;
+        // lowerArm.position.y = lowerArmMesh.height/2;
         lowerArmMesh.mesh.position.y = lowerArmMesh.height/2;
-        lowerArmMesh.mesh.scale.y = lowerArmMesh.height; // set scaling
+        lowerArmMesh.mesh.scale.y = lowerArmMesh.height/2; // set scaling
         // luxo middle joints
-        middleJoint.position.y = lowerArmMesh.height * 3 / 2;
+        middleJoint.position.y = lowerArmMesh.height;
         middleJoint.mesh.rotation.z = THREE.MathUtils.degToRad(90); // lay the joint down;
         middleJoint.rotation.x = THREE.MathUtils.degToRad(middleJoint.angle); // set rotation
         // luxo upper arms
-        upperArm.position.y = upperArmMesh.height/2;
+        // upperArm.position.y = upperArmMesh.height/2;
         upperArmMesh.mesh.position.y = upperArmMesh.height/2;
-        upperArmMesh.mesh.scale.y = upperArmMesh.height; // set scaling
+        upperArmMesh.mesh.scale.y = upperArmMesh.height/2; // set scaling
         // luxo head joints
-        headJoint.position.y = upperArmMesh.height * 3 / 2;
+        headJoint.position.y = upperArmMesh.height;
         headJoint.mesh.rotation.z = THREE.MathUtils.degToRad(90); // lay the joint down;
         headJoint.rotation.x = THREE.MathUtils.degToRad(headJoint.angle); // set rotation
         // luxo lamp
